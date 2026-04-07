@@ -1,0 +1,15 @@
+{
+    "code-runner.executorMap": {
+        "kotlin": "export PATH=$PATH:/home/figue/Descargas/jdk-17.0.10+7/bin && /home/figue/Descargas/kotlin-native-prebuilt-linux-x86_64-2.4.0-Beta1/bin/konanc $fileName -o $fileNameWithoutExt && echo '\n✅ Compilado con éxito. Ahora puedes hacer lo que quieras con $fileNameWithoutExt.kexe'"
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.clearPreviousOutput": true,
+    "terminal.integrated.profiles.linux": {
+        "Terminal Real (Host)": {
+            "path": "/usr/bin/flatpak-spawn",
+            "args": ["--host", "bash"]
+        }
+    },
+    "terminal.integrated.defaultProfile.linux": "Terminal Real (Host)"
+}
