@@ -1,6 +1,6 @@
 {
     "code-runner.executorMap": {
-        "kotlin": "export PATH=$PATH:/home/figue/Descargas/jdk-17.0.10+7/bin && /home/figue/Descargas/kotlin-native-prebuilt-linux-x86_64-2.4.0-Beta1/bin/konanc $fileName -o $fileNameWithoutExt && echo '\n✅ Compilado con éxito. Ahora puedes hacer lo que quieras con $fileNameWithoutExt.kexe'"
+        "kotlin": "cd $dir && export PATH=$PATH:/home/figue/Descargas/jdk-17.0.10+7/bin && /home/figue/Descargas/kotlin-native-prebuilt-linux-x86_64-2.4.0-Beta1/bin/konanc $fileName -o $fileNameWithoutExt && echo '\n✅ Compilado con éxito en la misma carpeta. Ahora puedes hacer lo que quieras con $dir$fileNameWithoutExt.kexe'"
     },
     "code-runner.runInTerminal": true,
     "code-runner.saveFileBeforeRun": true,

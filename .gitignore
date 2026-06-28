@@ -1,0 +1,8 @@
+.env
+*.kexe
+*.properties
+*.bc
+*.def
+*.klib
+*.json
+settings.json
