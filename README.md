@@ -79,6 +79,7 @@ KotlinNative/
 │
 ├── docs/                               # Documentación detallada de cada módulo
 │   ├── ai_developer.md                 # Documentación del optimizador de prompts
+│   ├── ai_instruction_aut.md           # Documentación del generador de instrucciones
 │   ├── kfind.md                        # Documentación del comando de búsqueda
 │   ├── kls.md                          # Documentación del comando de listado
 │   └── ktree.md                        # Documentación del comando de árbol
@@ -89,6 +90,12 @@ KotlinNative/
 │   │   ├── context/                    # Carpeta para archivos de contexto del proyecto
 │   │   ├── main.kt                     # UI Gráfica con GTK3
 │   │   └── ai_gestor.kt                # Integración con la API de Gemini (Curl)
+│   │
+│   ├── ai_instruction_aut/             # Generador automatizado de instrucciones (GTK3 + Curl)
+│   │   ├── main.kt                     # UI Gráfica Multi-Pestaña con GTK3
+│   │   ├── read_env.kt                 # Lógica nativa de parseo del archivo .env
+│   │   ├── write_instruction_estand.kt # Generador de reglas estándar (Llamada HTTP a IA)
+│   │   └── write_instruction_project.kt# Generador de directrices de proyecto
 │   │
 │   └── comands/                        # Utilidades CLI del sistema (POSIX nativo)
 │       ├── kfind.kt                    # Buscador de archivos nativo
