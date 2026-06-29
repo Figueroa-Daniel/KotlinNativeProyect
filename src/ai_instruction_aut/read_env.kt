@@ -1,9 +1,12 @@
-package readFiles
-
 import kotlinx.cinterop.*
 import platform.posix.*
 
-fun obtenerVariableEnv(claveBuscada: String, ruta: String = ".env"): String? {
+/**
+ * Lee una clave del archivo .env de ai_instruction_aut.
+ * Primero intenta leerla como variable del sistema, luego busca en el archivo .env.
+ */
+@OptIn(ExperimentalForeignApi::class)
+fun obtenerVariableEnvInst(claveBuscada: String, ruta: String = ".env"): String? {
     // Intentar buscar en variables del sistema primero
     val valorSistema = getenv(claveBuscada)?.toKString()
     if (valorSistema != null) return valorSistema
@@ -12,11 +15,12 @@ fun obtenerVariableEnv(claveBuscada: String, ruta: String = ".env"): String? {
     // Fallbacks si la ruta por defecto no existe
     if (archivo == null && ruta == ".env") {
         archivo = fopen("../.env", "r")
-                ?: fopen("src/ai_developer/.env", "r")
-                ?: fopen("../src/ai_developer/.env", "r")
+                ?: fopen("src/ai_instruction_aut/.env", "r")
+                ?: fopen("../src/ai_instruction_aut/.env", "r")
     }
 
     if (archivo == null) return null
+
     val bufferSize = 1024
     val buffer = ByteArray(bufferSize)
     var valorEncontrado: String? = null
@@ -32,7 +36,7 @@ fun obtenerVariableEnv(claveBuscada: String, ruta: String = ".env"): String? {
             // Buscar la separación del signo '='
             val partes = linea.split("=", limit = 2)
             if (partes.size == 2 && partes[0].trim() == claveBuscada) {
-                // Limpiamos posibles comillas que rodeen al valor (ej: "mi_token")
+                // Limpiar posibles comillas que rodeen al valor
                 valorEncontrado = partes[1].trim().removeSurrounding("\"").removeSurrounding("'")
                 break
             }
