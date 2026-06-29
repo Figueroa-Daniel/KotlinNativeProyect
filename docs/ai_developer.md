@@ -51,22 +51,26 @@ sudo apt update
 sudo apt install libcurl4-openssl-dev libgtk-3-dev
 ```
 
-Además, en el directorio de compilación se requieren los binarios `.klib` generados previamente con `cinterop`:
-*   `curl.klib` (interfaz nativa para libcurl).
-*   `gtk3.klib` (interfaz nativa para GTK3).
+Además, se requieren los binarios `.klib` generados previamente en la ruta `cinterop/klib/`:
+*   `cinterop/klib/curl.klib` (interfaz nativa para libcurl).
+*   `cinterop/klib/gtk3.klib` (interfaz nativa para GTK3).
 
 ---
 
 ## 💻 Compilación y Ejecución
 
-Compila todos los archivos fuente de la aplicación enlazando ambas bibliotecas nativas y asignando la ruta del linker de 64 bits:
+Compila todos los archivos fuente de la aplicación enlazando ambas bibliotecas nativas y asignando la ruta del linker de 64 bits (ejecuta estos comandos desde la raíz del proyecto):
 
 ```bash
+# Generar bindings .klib si no están generados
+cinterop -def cinterop/def/curl.def -o cinterop/klib/curl.klib
+cinterop -def cinterop/def/gtk3.def -o cinterop/klib/gtk3.klib
+
 # Compilar el ejecutable
-kotlinc-native main.kt ai_gestor.kt readFiles/read_context.kt readFiles/read_env.kt -library curl.klib -library gtk3.klib -o Up_Prompts -opt-in=kotlinx.cinterop.ExperimentalForeignApi -linker-options -L/usr/lib/x86_64-linux-gnu
+kotlinc-native src/ai_developer/main.kt src/ai_developer/ai_gestor.kt src/ai_developer/readFiles/read_context.kt src/ai_developer/readFiles/read_env.kt -library cinterop/klib/curl.klib -library cinterop/klib/gtk3.klib -o bin/Up_Prompts -opt-in=kotlinx.cinterop.ExperimentalForeignApi -linker-options -L/usr/lib/x86_64-linux-gnu
 
 # Ejecutar la aplicación
-./Up_Prompts.kexe
+./bin/Up_Prompts.kexe
 ```
 
 ---

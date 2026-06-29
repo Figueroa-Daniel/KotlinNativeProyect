@@ -30,11 +30,11 @@ Kotlin/Native ofrece interoperabilidad bidireccional de alto rendimiento con el 
         ```
 2.  **Generación del Binding (`.klib`):** Se procesa el archivo `.def` para generar una biblioteca de Kotlin (`.klib`) que expone las firmas de C como código Kotlin:
     ```bash
-    cinterop -def curl.def -o curl.klib
+    cinterop -def cinterop/def/curl.def -o cinterop/klib/curl.klib
     ```
-3.  **Compilación Final:** Se compila el código Kotlin enlazando el archivo `.klib` resultante:
+3.  **Compilación Final:** Se compila el código Kotlin enlazando el archivo `.klib` resultante (indicando la ruta del archivo `.klib` con `-library`):
     ```bash
-    kotlinc-native main.kt -library curl.klib -o app.kexe
+    kotlinc-native main.kt -library cinterop/klib/curl.klib -o app.kexe
     ```
 
 ---
@@ -69,6 +69,14 @@ El ecosistema está organizado en base a características y comandos CLI:
 KotlinNative/
 │
 ├── bin/                                # Ejecutables binarios resultantes (.kexe)
+├── cinterop/                           # Carpeta de interoperabilidad con C
+│   ├── def/                            # Archivos de definición (.def)
+│   │   ├── curl.def
+│   │   └── gtk3.def
+│   └── klib/                           # Librerías de bindings compiladas (.klib)
+│       ├── curl.klib
+│       └── gtk3.klib
+│
 ├── docs/                               # Documentación detallada de cada módulo
 │   ├── ai_developer.md                 # Documentación del optimizador de prompts
 │   ├── kfind.md                        # Documentación del comando de búsqueda
@@ -80,9 +88,7 @@ KotlinNative/
 │   │   ├── readFiles/                  # Módulos de lectura nativa (Contexto y Env)
 │   │   ├── context/                    # Carpeta para archivos de contexto del proyecto
 │   │   ├── main.kt                     # UI Gráfica con GTK3
-│   │   ├── ai_gestor.kt                # Integración con la API de Gemini (Curl)
-│   │   ├── curl.def                    # Definición de interoperabilidad con libcurl
-│   │   └── gtk3.def                    # Definición de interoperabilidad con GTK3
+│   │   └── ai_gestor.kt                # Integración con la API de Gemini (Curl)
 │   │
 │   └── comands/                        # Utilidades CLI del sistema (POSIX nativo)
 │       ├── kfind.kt                    # Buscador de archivos nativo
@@ -119,19 +125,20 @@ kotlinc-native src/comands/kls.kt -o bin/kls
 ```
 
 #### 2. Compilar aplicaciones con interoperabilidad (ej: `ai_developer`):
-Requiere enlazar las bibliotecas nativas de GTK3 y Curl:
+Requiere generar los bindings de GTK3 y Curl en la carpeta `cinterop/klib` y luego compilar:
 ```bash
-# Posicionarse en la carpeta
-cd src/ai_developer
+# Generar bindings .klib desde los archivos .def (ejecutar en la raíz)
+cinterop -def cinterop/def/curl.def -o cinterop/klib/curl.klib
+cinterop -def cinterop/def/gtk3.def -o cinterop/klib/gtk3.klib
 
-# Compilar indicando las librerías .klib de cinterop y la ruta del linker de 64 bits
-kotlinc-native main.kt ai_gestor.kt readFiles/read_context.kt readFiles/read_env.kt \
-  -library curl.klib \
-  -library gtk3.klib \
-  -o ../../bin/Up_Prompts \
+# Compilar desde la raíz del proyecto indicando los archivos fuente y las librerías .klib
+kotlinc-native src/ai_developer/main.kt src/ai_developer/ai_gestor.kt src/ai_developer/readFiles/read_context.kt src/ai_developer/readFiles/read_env.kt \
+  -library cinterop/klib/curl.klib \
+  -library cinterop/klib/gtk3.klib \
+  -o bin/Up_Prompts \
   -opt-in=kotlinx.cinterop.ExperimentalForeignApi \
   -linker-options -L/usr/lib/x86_64-linux-gnu
 
 # Ejecutar el optimizador
-../../bin/Up_Prompts.kexe
+./bin/Up_Prompts.kexe
 ```
